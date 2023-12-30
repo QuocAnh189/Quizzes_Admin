@@ -1,5 +1,5 @@
 import UserType, { InitUser } from './userType';
-import GameType from './gameType';
+import GameType, { InitGame } from './gameType';
 
 export type AnswerPlayerType = {
     questionIndex: number;
@@ -20,7 +20,7 @@ const InitAnswerPlayer = {
 type PlayerResultType = {
     _id: string;
     player: UserType;
-    game: null | string | GameType;
+    game: GameType | null;
     score: number;
     answers: AnswerPlayerType[];
 };

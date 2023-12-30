@@ -1,5 +1,4 @@
-import { Icons } from "src/components/icons";
-import { NavItem, SidebarNavItem } from "src/types/navIcon";
+import { NavItem } from "src/types/navIcon";
 
 export type User = {
   id: number;
@@ -155,33 +154,9 @@ export const navItems: NavItem[] = [
     label: "playerresult",
   },
   {
-    title: "Category",
-    href: "/dashboard/category",
-    icon: "category",
-    label: "category",
-  },
-  {
-    title: "Employee",
-    href: "/dashboard/employee",
-    icon: "employee",
-    label: "employee",
-  },
-  {
-    title: "Profile",
-    href: "/dashboard/profile",
-    icon: "profile",
-    label: "profile",
-  },
-  {
     title: "Kanban",
     href: "/dashboard/kanban",
     icon: "kanban",
     label: "kanban",
-  },
-  {
-    title: "Login",
-    href: "/",
-    icon: "login",
-    label: "login",
   },
 ];

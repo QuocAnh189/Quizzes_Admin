@@ -11,21 +11,44 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu";
-import { useSession, signIn, signOut } from "next-auth/react";
-export function UserNav() {
-  const { data: session } = useSession();
 
-  if (session) {
+//redux
+import { useUserLogOutMutation } from "src/redux/services/authApi";
+import { logOut } from "src/redux/slices/authSlice";
+
+import { useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "src/redux/hooks";
+
+export function UserNav() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const auth = useAppSelector((state) => state.auth.authData);
+  const [Logout] = useUserLogOutMutation();
+  const handleLogOut = async () => {
+    await Logout({ userId: auth.user._id })
+      .unwrap()
+      .then((res) => {
+        if (res) {
+          router.push("/");
+        }
+      })
+      .finally(() => {
+        dispatch(logOut());
+      });
+  };
+
+  if (auth) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={session.user?.image ?? ""}
-                alt={session.user?.name ?? ""}
+                src={auth.user.avatar ?? ""}
+                alt={auth.user?.userName ?? ""}
               />
-              <AvatarFallback>{session.user?.name}</AvatarFallback>
+              <AvatarFallback>{auth.user?.firstName}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
@@ -33,15 +56,15 @@ export function UserNav() {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {session.user?.name}
+                {auth.user?.userName}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {session.user?.email}
+                {auth.user.mail}
               </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
+          <DropdownMenuGroup className="hover:cursor-pointer">
             <DropdownMenuItem>
               Profile
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
@@ -57,7 +80,7 @@ export function UserNav() {
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={handleLogOut}>
             Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>

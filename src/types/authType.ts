@@ -1,22 +1,4 @@
-import UserType ,{ InitUser }from "./userType";
-
-export interface LoginPayload {
-    mail: string;
-    password: string;
-  }
-  
-  export interface SignUpPayload {
-    email: string;
-    password: string;
-    name: string;
-    phone: string;
-  }
-  
-  export interface Token {
-    token: string;
-    expiredAt: string;
-  }
-  
+import UserType ,{ InitUser }from "./userType";  
 
 type AuthType = {
     user: UserType;

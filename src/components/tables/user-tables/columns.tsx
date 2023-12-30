@@ -3,8 +3,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { User } from "src/constants/data";
 import { Checkbox } from "src/components/ui/checkbox";
+import UserType from "src/types/userType";
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<UserType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -25,20 +26,20 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: "NAME",
+    accessorKey: "userName",
+    header: "UserName",
   },
   {
-    accessorKey: "company",
-    header: "COMPANY",
+    accessorKey: "workspace",
+    header: "WORKPLACE",
   },
   {
-    accessorKey: "role",
+    accessorKey: "userType",
     header: "ROLE",
   },
   {
-    accessorKey: "status",
-    header: "STATUS",
+    accessorKey: "mail",
+    header: "EMAIL",
   },
   {
     id: "actions",

@@ -8,22 +8,44 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu";
-import { User } from "src/constants/data";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import UserType from "src/types/userType";
+import { useAppDispatch } from "src/redux/hooks";
+import { setStatus } from "src/redux/slices/statusSlice";
+import { setUser } from "src/redux/slices/userSlice";
+import { useDeleteUserMutation } from "src/redux/services/userApi";
+import { useToast } from "src/components/ui/use-toast";
 interface CellActionProps {
-  data: User;
+  data: UserType;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const { toast } = useToast();
+
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const params = useParams();
 
-  const onConfirm = async () => {};
+  const [deleteUser] = useDeleteUserMutation();
+
+  const onConfirm = async () => {
+    deleteUser({ userId: data._id })
+      .unwrap()
+      .then((res) => {
+        setOpen(false);
+        toast({
+          variant: "default",
+          title: "Delete Successfully",
+          description: `Delete userId ${data._id} successfully`,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -44,7 +66,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/user/${data.id}`)}
+            onClick={() => {
+              dispatch(setUser(data));
+              dispatch(setStatus(false));
+              router.push(`/dashboard/user/${data._id}`);
+            }}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

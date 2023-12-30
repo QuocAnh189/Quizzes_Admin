@@ -1,12 +1,11 @@
 import QuestionType, { InitQuestion } from './questionType';
 import UserType, { InitUser } from './userType';
 
-export type CreatorType = Pick<UserType, '_id' | 'userName' | 'userType' | 'avatar' | 'firstName' | 'lastName'>;
 
 type QuizType = {
     _id: string;
     name: string;
-    creator: CreatorType | string;
+    creator: UserType;
     description: string;
     backgroundImage: string;
     isPublic: boolean;
@@ -32,14 +31,7 @@ type QuizType = {
 export const InitQuiz = {
     _id: '',
     name: '',
-    creator: {
-        _id: '',
-        userName: '',
-        userType: '',
-        avatar: '',
-        firstName: '',
-        lastName: ''
-    },
+    creator: InitUser,
     description: '',
     backgroundImage: '',
     isPublic: true,

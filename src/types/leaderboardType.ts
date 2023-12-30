@@ -32,6 +32,8 @@ type LeaderBoardType = {
     pin: string;
     playerResultList: PlayerResultType[];
     currentLeaderBoard: CurrentLeaderBoardType[];
+    createdAt: any;
+    updatedAt: any;
 };
 
 export const InitLeaderBoard = {
@@ -40,7 +42,9 @@ export const InitLeaderBoard = {
     quiz: InitQuiz,
     pin: '',
     playerResultList: [InitPlayerResult],
-    currentLeaderBoard: [InitCurrentLeaderBoard]
+    currentLeaderBoard: [InitCurrentLeaderBoard],
+    createdAt: '',
+    updatedAt: ''
 } as LeaderBoardType;
 
 export default LeaderBoardType;

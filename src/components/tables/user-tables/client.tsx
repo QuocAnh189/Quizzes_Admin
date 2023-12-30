@@ -1,20 +1,22 @@
 "use client";
 import { Plus } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "src/components/ui/button";
 import { DataTable } from "src/components/ui/data-table";
 import { columns } from "./columns";
-import { User } from "src/constants/data";
 import { Heading } from "src/components/ui/heading";
 import { Separator } from "src/components/ui/separator";
+import UserType from "src/types/userType";
 
+import { useAppDispatch } from "src/redux/hooks";
+import { setStatus } from "src/redux/slices/statusSlice";
 interface ProductsClientProps {
-  data: User[];
+  data: UserType[];
 }
 
 export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
-  const params = useParams();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -25,13 +27,16 @@ export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
         />
         <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/user/new`)}
+          onClick={() => {
+            dispatch(setStatus(true));
+            router.push(`/dashboard/user/new`);
+          }}
         >
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="name" columns={columns} data={data} />
+      <DataTable searchKey="userName" columns={columns} data={data} />
     </>
   );
 };

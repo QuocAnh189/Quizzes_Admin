@@ -5,7 +5,7 @@ import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { UploadFileResponse } from "uploadthing/client";
-import { IMG_MAX_LIMIT } from "./forms/product-form";
+import { IMG_MAX_LIMIT } from "./forms/user-form";
 import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
 
@@ -13,7 +13,8 @@ interface ImageUploadProps {
   disabled?: boolean;
   onChange?: any;
   onRemove: (value: UploadFileResponse[]) => void;
-  value: UploadFileResponse[];
+  // value: UploadFileResponse[];
+  value:any;
 }
 
 export default function FileUpload({
@@ -26,7 +27,7 @@ export default function FileUpload({
   const { toast } = useToast();
   const onDeleteFile = (key: string) => {
     const files = value;
-    let filteredFiles = files.filter((item) => item.key !== key);
+    let filteredFiles = files.filter((item:any) => item.key !== key);
     onRemove(filteredFiles);
   };
   const onUpdateFile = (newFiles: UploadFileResponse[]) => {
@@ -34,36 +35,9 @@ export default function FileUpload({
   };
   return (
     <div>
-      <div className="mb-4 flex items-center gap-4">
-        {!!value.length &&
-          value?.map((item) => (
-            <div
-              key={item.key}
-              className="relative w-[200px] h-[200px] rounded-md overflow-hidden"
-            >
-              <div className="z-10 absolute top-2 right-2">
-                <Button
-                  type="button"
-                  onClick={() => onDeleteFile(item.key)}
-                  variant="destructive"
-                  size="sm"
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </div>
-              <div>
-                <Image
-                  fill
-                  className="object-cover"
-                  alt="Image"
-                  src={item.fileUrl || ""}
-                />
-              </div>
-            </div>
-          ))}
-      </div>
       <div>
-        {value.length < IMG_MAX_LIMIT && (
+        {/* value?.length < IMG_MAX_LIMIT && */}
+        {
           <UploadDropzone<OurFileRouter>
             className="dark:bg-zinc-800 py-2 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
             endpoint="imageUploader"
@@ -80,7 +54,7 @@ export default function FileUpload({
                   );
               },
             }}
-            onClientUploadComplete={(res:any) => {
+            onClientUploadComplete={(res: any) => {
               // Do something with the response
               console.log("Files: ", res);
               const data: UploadFileResponse[] | undefined = res;
@@ -95,13 +69,42 @@ export default function FileUpload({
                 description: error.message,
               });
             }}
-            onUploadBegin={(name:any) => {
+            onUploadBegin={(name: any) => {
               // Do something once upload begins
               console.log("Uploading: ", name);
             }}
           />
-        )}
+        }
       </div>
     </div>
   );
 }
+
+// <div className="mb-4 flex items-center gap-4">
+//         {!!value?.length &&
+//           value?.map((item) => (
+//             <div
+//               key={item.key}
+//               className="relative w-[200px] h-[200px] rounded-md overflow-hidden"
+//             >
+//               <div className="z-10 absolute top-2 right-2">
+//                 <Button
+//                   type="button"
+//                   onClick={() => onDeleteFile(item.key)}
+//                   variant="destructive"
+//                   size="sm"
+//                 >
+//                   <Trash className="h-4 w-4" />
+//                 </Button>
+//               </div>
+//               <div>
+//                 <Image
+//                   fill
+//                   className="object-cover"
+//                   alt="Image"
+//                   src={item.fileUrl || ""}
+//                 />
+//               </div>
+//             </div>
+//           ))}
+//       </div>

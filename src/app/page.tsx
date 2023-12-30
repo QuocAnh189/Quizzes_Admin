@@ -8,7 +8,7 @@ import background from "src/public/background.png";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Authentication",
+  title: "SignIn",
   description: "Authentication forms built using the components.",
 };
 

@@ -1,17 +1,17 @@
 import UserType, { InitUser } from './userType';
-import QuizType, { CreatorType, InitQuiz } from './quizType';
+import QuizType, {  InitQuiz } from './quizType';
 import PlayerResultType, { InitPlayerResult } from './playerResultType';
 
 type GameType = {
     _id: string;
-    host: CreatorType;
+    host: UserType;
     quiz: QuizType;
     pin: string;
     isLive: boolean;
     playerList: UserType[];
     playerResultList: PlayerResultType[];
-    createAt?: string;
-    updatedAt?: string;
+    createAt: any;
+    updatedAt: any;
 };
 
 export const InitGame = {
