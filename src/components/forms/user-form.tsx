@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Input } from "src/components/ui/input";
 import { Button } from "src/components/ui/button";
+
 import {
   Form,
   FormControl,
@@ -35,13 +36,13 @@ import {
 interface ProductFormProps {
   create: boolean;
   userType: any;
-  workSpace:any;
+  workSpace: any;
 }
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   create,
   userType,
-  workSpace
+  workSpace,
 }) => {
   const router = useRouter();
   const { toast } = useToast();
@@ -50,7 +51,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [updateUser] = useUpdateUserMutation();
 
   const user = useAppSelector((state) => state.user.user);
-
   const [loading, setLoading] = useState(false);
 
   const title = !create ? "Edit user" : "Create user";
@@ -132,13 +132,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             name="avatar"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Images</FormLabel>
+                <FormLabel>Avatar</FormLabel>
                 <FormControl>
                   <FileUpload
                     onChange={field.onChange}
                     value={field.value}
                     onRemove={field.onChange}
-                  />
+                  />  
                 </FormControl>
                 <FormMessage />
               </FormItem>

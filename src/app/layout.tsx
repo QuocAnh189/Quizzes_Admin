@@ -15,11 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`overflow-hidden`}>
-        <Providers session={null}>
-        <Provider store={store}>
-          <Toaster />
-          {children}
-        </Provider>
+        <Providers>
+          <Provider store={store}>
+            <Toaster />
+            {children}
+          </Provider>
         </Providers>
       </body>
     </html>

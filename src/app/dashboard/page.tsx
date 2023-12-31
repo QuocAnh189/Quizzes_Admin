@@ -1,6 +1,10 @@
+"use client";
 import { CalendarDateRangePicker } from "src/components/date-range-picker";
 import { Overview } from "src/components/overview";
-import { RecentSales } from "src/components/recent-sales";
+import { OverviewUser } from "src/components/overviewUser";
+import { OverviewQuizzes } from "src/components/overviewQuizzes";
+import { RecentUsers } from "src/components/recent-user";
+import { RecentQuizzes } from "src/components/recent-quizzes";
 import { Button } from "src/components/ui/button";
 import {
   Card,
@@ -9,9 +13,20 @@ import {
   CardHeader,
   CardTitle,
 } from "src/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "src/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "src/components/ui/tabs";
+import { useGetQuizzesQuery } from "src/redux/services/quizApi";
+import { useGetUsersQuery } from "src/redux/services/userApi";
 
-export default function page() {
+
+export default function Page() {
+  const { data: users } = useGetUsersQuery();
+  const { data: quizzes } = useGetQuizzesQuery();
+
   return (
     <>
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -61,7 +76,7 @@ export default function page() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Subscriptions
+                    Total Users
                   </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -79,15 +94,17 @@ export default function page() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+2350</div>
+                  <div className="text-2xl font-bold">+{users?.length}</div>
                   <p className="text-xs text-muted-foreground">
-                    +180.1% from last month
+                    +10.1% from last month
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Total Quizzes
+                  </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -103,7 +120,7 @@ export default function page() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+12,234</div>
+                  <div className="text-2xl font-bold">+{quizzes?.length}</div>
                   <p className="text-xs text-muted-foreground">
                     +19% from last month
                   </p>
@@ -138,42 +155,42 @@ export default function page() {
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
               <Card className="col-span-4">
                 <CardHeader>
-                  <CardTitle>Overview</CardTitle>
+                  <CardTitle>Overview Users</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                  <Overview />
+                  <OverviewUser />
                 </CardContent>
               </Card>
               <Card className="col-span-4 md:col-span-3">
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
+                  <CardTitle>Recent User</CardTitle>
                   <CardDescription>
-                    You made 265 sales this month.
+                    Up to {users?.length} people use the system this month
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  <RecentUsers users={users?.slice(0, 5)!} />
                 </CardContent>
               </Card>
             </div>
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
               <Card className="col-span-4">
                 <CardHeader>
-                  <CardTitle>Overview</CardTitle>
+                  <CardTitle>Overview Quizzes</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                  <Overview />
+                  <OverviewQuizzes />
                 </CardContent>
               </Card>
               <Card className="col-span-4 md:col-span-3">
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
+                  <CardTitle>Recent Quiz</CardTitle>
                   <CardDescription>
-                    You made 265 sales this month.
+                    There are {quizzes?.length} user-generated quizzes.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  <RecentQuizzes quizzes={quizzes?.slice(0, 5)!} />
                 </CardContent>
               </Card>
             </div>

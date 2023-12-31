@@ -1,20 +1,21 @@
-"use client";
+// "use client";
+
 import { OurFileRouter } from "src/app/api/uploadthing/core";
 import { UploadDropzone } from "@uploadthing/react";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { UploadFileResponse } from "uploadthing/client";
-import { IMG_MAX_LIMIT } from "./forms/user-form";
+// import { IMG_MAX_LIMIT } from "./forms/user-form";
 import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
-
+import Ondelete from "src/app/server/deleteImage";
 interface ImageUploadProps {
   disabled?: boolean;
   onChange?: any;
   onRemove: (value: UploadFileResponse[]) => void;
   // value: UploadFileResponse[];
-  value:any;
+  value: any;
 }
 
 export default function FileUpload({
@@ -23,27 +24,52 @@ export default function FileUpload({
   onRemove,
   value,
 }: ImageUploadProps) {
-  const router = useRouter();
   const { toast } = useToast();
-  const onDeleteFile = (key: string) => {
-    const files = value;
-    let filteredFiles = files.filter((item:any) => item.key !== key);
-    onRemove(filteredFiles);
+  const onDeleteFile = async () => {
+    const res = await Ondelete(value.key);  
+    console.log(res);
+    onChange("");
   };
+
   const onUpdateFile = (newFiles: UploadFileResponse[]) => {
-    onChange([...value, ...newFiles]);
+    onChange({ url: newFiles[0].url, key: newFiles[0].key });
   };
+
   return (
     <div>
+      <div className="mb-4 flex items-center gap-4">
+        {value && (
+          <div className="relative w-[200px] h-[200px] rounded-md overflow-hidden">
+            <div className="z-10 absolute top-2 right-2">
+              <Button
+                type="button"
+                // onClick={() => onDeleteFile(item)}
+                onClick={onDeleteFile}
+                variant="destructive"
+                size="sm"
+              >
+                <Trash className="h-4 w-4" />
+              </Button>
+            </div>
+            <div>
+              <Image
+                fill
+                className="object-cover"
+                alt="Image"
+                src={value.url || value || ""}
+              />
+            </div>
+          </div>
+        )}
+      </div>
       <div>
-        {/* value?.length < IMG_MAX_LIMIT && */}
-        {
+        {value.length < 3 && (
           <UploadDropzone<OurFileRouter>
             className="dark:bg-zinc-800 py-2 ut-label:text-sm ut-allowed-content:ut-uploading:text-red-300"
             endpoint="imageUploader"
             config={{ mode: "auto" }}
             content={{
-              allowedContent({ isUploading }: { isUploading: any }) {
+              allowedContent({ isUploading }) {
                 if (isUploading)
                   return (
                     <>
@@ -54,7 +80,7 @@ export default function FileUpload({
                   );
               },
             }}
-            onClientUploadComplete={(res: any) => {
+            onClientUploadComplete={(res) => {
               // Do something with the response
               console.log("Files: ", res);
               const data: UploadFileResponse[] | undefined = res;
@@ -69,12 +95,12 @@ export default function FileUpload({
                 description: error.message,
               });
             }}
-            onUploadBegin={(name: any) => {
+            onUploadBegin={(name) => {
               // Do something once upload begins
               console.log("Uploading: ", name);
             }}
           />
-        }
+        )}
       </div>
     </div>
   );
